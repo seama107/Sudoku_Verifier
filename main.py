@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+# coding: utf-8
+
 from read_sudoku import csv_to_sudoku
 from sudoku_verify import *
 from sudoku_solve import *
