@@ -1,5 +1,6 @@
 from read_sudoku import csv_to_sudoku
-from sudoku import *
+from sudoku_verify import *
+from sudoku_solve import *
 import sys
 
 def main(argv):
@@ -8,24 +9,24 @@ def main(argv):
     puzzle = csv_to_sudoku(infile)
     errors = check_puzzle(puzzle)
     print_errors(errors, puzzle)
-    if(errors):
-        # Continuing to try to solve the puzzle
-        pass
+    if(errors.any()):
+        puzzle_solved = solve_puzzle(puzzle, errors)
+        print("Your solution:")
+        print(puzzle)
+        print("The correct solution:")
+        print(puzzle_solved)
 
-
-def print_errors(error_list, puzzle):
-    # Takes a list of 3-tuples in the form
-    # (job_code, row, col) - row, col indexed from 0
+def print_errors(errors, puzzle):
+    # Takes a list of 2-tuples in the form
+    # (row, col) - row, col indexed from 0
     # And prints out the information in a user-friendly way
-    chunk_names = ["row", "column", "square"]
-    if(error_list):
-        for e in error_list:
-            chunk_name = chunk_names[e[0] - 1]
-            row = e[1]
-            col = e[2]
+    if(errors.any()):
+        for e in errors:
+            row = e[0]
+            col = e[1]
             repeated_number = puzzle[row,col]
-            message = "Found a number reapeated in a {}. '{}' in row {}, col {}"
-            print(message.format(chunk_name, repeated_number, row+1, col+1))
+            message = "Found a {} reapeated at row {}, col {}"
+            print(message.format(repeated_number, row+1, col+1))
     else:
         print("The puzzle is solved correctly!")
 
